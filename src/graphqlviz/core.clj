@@ -6,7 +6,8 @@
 
 (defn internal-type? [t]
   (let [name (:name t)]
-    (and name (.startsWith name "__"))))
+    (or (and name (.startsWith name "__"))
+        #_(= "QueryType" name))))
 
 (defn scalar? [t]
   (= "SCALAR" (:kind t)))
@@ -30,13 +31,25 @@
 
 (defn describe-field-type [t]
   (case (:kind t)
-    "NON_NULL" (str "NotNull<" (describe-field-type (:ofType t)) ">")
-    "LIST" (str "List<" (describe-field-type (:ofType t)) ">")
+    "NON_NULL" (str (describe-field-type (:ofType t)) "!")
+    "LIST" (str "[" (describe-field-type (:ofType t)) "]")
     (:name t)))
 
+(defn format-args [args]
+  (apply str (interpose ", " (map (fn [a] (str (:name a) ": " (describe-field-type (:type a)))) args))))
+
+(defn get-field-label [field]
+  (let [{:keys [type name description args]} field]
+    (str name
+         (if-not (empty? args)
+           (str "(" (format-args args) ")")
+           "")
+         ": "
+         (describe-field-type type))))
+
 (defn type->edges [t]
-  (remove nil? (map (fn [{:keys [type name description]}]
-                      [(:name t) (:name (terminal-type type)) {:label (str name ": " (describe-field-type type))
+  (remove nil? (map (fn [{:keys [type name description] :as field}]
+                      [(:name t) (:name (terminal-type type)) {:label (get-field-label field)
                                                                :labeltooltip (str description)}])
                     (filter relation-field? (:fields t)))))
 
@@ -52,11 +65,12 @@
 
 (defn render [nodes edges filename]
   (let [dot (graph->dot nodes edges {:node {:shape :record}
-                                     :graph {:rankdir :LR}
+                                     :graph {:label filename :rankdir :LR}
                                      :directed? true
                                      :node->id type->id
                                      :node->descriptor type->descriptor})
         svg (dot->svg dot)]
+    (spit (str filename ".dot") dot)
     (spit (str filename ".svg") svg)
     ))
 
