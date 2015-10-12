@@ -8,6 +8,7 @@ TODO
 
 ![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/otp.svg)
 
+=======
 ## License
 
 Copyright © 2015 Markku Rontu
