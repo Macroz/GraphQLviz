@@ -6,7 +6,7 @@ GraphQLviz marries GraphQL (schemas) with Graphviz.
 
 TODO
 
-![Example schema](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.json) (from [Digitransit](http://digitransit.fi))
+![Example schema](examples/digitransit.json?raw=true) (from [Digitransit](http://digitransit.fi))
 
 ![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.svg)
 
@@ -15,7 +15,7 @@ TODO
 - Show enums
 - Print version without args
 - Make runnable from cmd-line when you have JSON schema
-- Use dynamic graph features as in [Archi](https://github.com/Macroz/archi)
+- Use dynamic graph features as in [archi](https://github.com/Macroz/archi)
 - Add introspection query
 
 =======
