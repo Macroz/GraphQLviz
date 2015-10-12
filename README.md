@@ -6,9 +6,9 @@ GraphQLviz marries GraphQL (schemas) with Graphviz.
 
 TODO
 
-![Example schema](https://rawgit.com/Macroz/GraphQLviz/master/examples/otp.svg) [Digitransit](http://digitransit.fi)
+![Example schema](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.json) [Digitransit](http://digitransit.fi)
 
-![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/otp.svg)
+![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.svg)
 
 ## Backlog
 
