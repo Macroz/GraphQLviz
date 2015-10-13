@@ -1,7 +1,8 @@
 (ns graphqlviz.core
   (:require [clojure.data.json :as json]
             [tangle.core :refer :all]
-            [clj-http.client :as http])
+            [clj-http.client :as http]
+            [clojure.java.io :as io])
   (:gen-class))
 
 ;;; GraphQL
@@ -24,6 +25,9 @@
   (if (:ofType t)
     (recur (:ofType t))
     t))
+
+(defn introspection-query []
+  {:query (slurp (io/file (io/resource "introspection.query")))})
 
 
 
@@ -130,11 +134,17 @@
 (defn fetch-schema [input output]
   (if (.startsWith input "http")
     (do (println "Fetching schema from" input)
-        (http/post input {:content-type "application/graphql"}))
+        (let [response (http/post input {:content-type "application/json"
+                                         :body (json/write-str (introspection-query))})]
+          (spit (str output ".json") (-> response
+                                         (:body)
+                                         (json/read-str :key-fn keyword)
+                                         (:data)
+                                         (json/write-str)))))
     (do (println "Loading schema from" input)
         (spit (str output ".json") (slurp input)))))
 
-(defn process-schema [input output]
+(defn process-schema [output]
   (let [[nodes edges] (load-schema (str output ".json"))]
     (render nodes edges output)))
 
@@ -143,7 +153,7 @@
     (let [input (first args)
           output (second args)]
       (fetch-schema input output)
-      (process-schema input output)
+      (process-schema output)
       (println "Done!")
       (shutdown-agents))
     (println "Usage: graphqlviz <url-or-file> <output-name>")))
