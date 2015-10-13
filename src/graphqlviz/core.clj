@@ -73,14 +73,17 @@
   (let [target (str "<" (:name t) "_" (:name f) ">")]
     (str (:name f) ": " (describe-field-type (:type f)))))
 
+(defn scalar-field-description [t f]
+  [:TR [:TD {:ALIGN "left"} (:name f) ": " (describe-field-type (:type f))]])
+
 (defn type->descriptor [t]
   (let [scalar-fields (remove relation-field? (:fields t))]
-    {:label (into [(:name t)]
-                  (map (partial field->str t)
-                       scalar-fields))}))
+    {:label (into [:TABLE {:CELLSPACING 0 :BORDER 1}]
+                  (concat [[:TR [:TD {:BGCOLOR "#E535AB"} [:FONT {:COLOR "white"} [:B (:name t)]]]]]
+                          (map (partial scalar-field-description t) scalar-fields)))}))
 
 (defn render [nodes edges filename]
-  (let [dot (graph->dot nodes edges {:node {:shape :record}
+  (let [dot (graph->dot nodes edges {:node {:shape :none :margin 0}
                                      :graph {:label filename :rankdir :LR}
                                      :directed? true
                                      :node->id type->id
