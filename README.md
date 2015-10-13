@@ -10,11 +10,9 @@ You can use GraphQLviz from command-line if you have [Graphviz](http://www.graph
 lein run examples/digitransit.json digitransit
 ```
 
-Also there is a prepackaged jar in [Clojars](https://clojars.org/macroz/graphqlviz) that is built with.
-```
-lein uberjar
-```
+Also there is a prepackaged jar in [Clojars](https://clojars.org/macroz/graphqlviz).
 
+There is also a convenient [uberjar](uberjar/graphqlviz.jar?raw=true) available to download.
 You can use it like a regular Java app like this.
 
 ```
