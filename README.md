@@ -19,7 +19,7 @@ You can use it like a regular Java app like this.
 java -jar graphqlviz.jar examples/digitransit.json digitransit
 ```
 
-![Example schema](examples/digitransit.json?raw=true) (from [Digitransit](http://digitransit.fi))
+[Example schema](examples/digitransit.json?raw=true) (from [Digitransit](http://digitransit.fi))
 
 ![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.svg)
 
