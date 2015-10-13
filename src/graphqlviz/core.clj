@@ -18,6 +18,14 @@
     t))
 
 
+
+;;; Configuration
+
+(def ^:dynamic *config*
+  {:expand-args false
+   :expand-arg-types false})
+
+
 ;;; Visualization
 
 (defn relation-field? [f]
@@ -35,8 +43,16 @@
     "LIST" (str "[" (describe-field-type (:ofType t)) "]")
     (:name t)))
 
+(defn arg->str [a]
+  (str (:name a)
+       (if (:expand-arg-types *config*)
+         (str ": " (describe-field-type (:type a)))
+         "")))
+
 (defn format-args [args]
-  (apply str (interpose ", " (map (fn [a] (str (:name a) ": " (describe-field-type (:type a)))) args))))
+  (if (:expand-args *config*)
+    (apply str (interpose ", " (map arg->str args)))
+    "..."))
 
 (defn get-field-label [field]
   (let [{:keys [type name description args]} field]
@@ -44,8 +60,8 @@
          (if-not (empty? args)
            (str "(" (format-args args) ")")
            "")
-         ": "
-         (describe-field-type type))))
+         #_": "
+         #_(describe-field-type type))))
 
 (defn type->edges [t]
   (remove nil? (map (fn [{:keys [type name description] :as field}]
