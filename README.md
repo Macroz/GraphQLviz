@@ -1,4 +1,4 @@
-# GraphQLviz [![Build Status](https://travis-ci.org/Macroz/graphqlviz.svg?branch=master)](https://travis-ci.org/Macroz/graphqlviz)
+# GraphQLviz [![Build Status](https://travis-ci.org/Macroz/GraphQLviz.svg?branch=master)](https://travis-ci.org/Macroz/GraphQLViz)
 
 GraphQLviz marries GraphQL (schemas) with Graphviz.
 
