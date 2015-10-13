@@ -1,6 +1,8 @@
 (ns graphqlviz.core
   (:require [clojure.data.json :as json]
-            [tangle.core :refer :all]))
+            [tangle.core :refer :all]
+            [clj-http.client :as http])
+  (:gen-class))
 
 ;;; GraphQL
 
@@ -100,28 +102,51 @@
                           (map enum-value-description (enum-values t))))}))
 
 (defn render [nodes edges filename]
+  (println "Generating graph from" (count nodes) "nodes and" (count edges) "edges")
   (let [dot (graph->dot nodes edges {:node {:shape :none :margin 0}
                                      :graph {:label filename :rankdir :LR}
                                      :directed? true
                                      :node->id type->id
-                                     :node->descriptor type->descriptor})
-        svg (dot->svg dot)]
+                                     :node->descriptor type->descriptor})]
+    (println "Writing DOT" (str filename ".dot"))
     (spit (str filename ".dot") dot)
-    (spit (str filename ".svg") svg)
+    (println "Writing SVG" (str filename ".svg"))
+    (spit (str filename ".svg") (dot->svg dot))
     ))
 
-(defn load [filename]
+(defn slurp-json [filename]
   (-> filename
       (slurp)
       (json/read-str :key-fn keyword)))
 
-(defn load-file [filename]
-  (let [schema (load filename)
+(defn load-schema [filename]
+  (let [schema (slurp-json filename)
         types (->> (:types (:__schema schema))
                    (remove uninteresting-type?))
         nodes (remove scalar? types)
         edges (mapcat type->edges types)]
     [nodes edges]))
 
-(let [[nodes edges] (load-file "/home/markku/dev/hsl/digitransit-ui/build/schema.json")]
-  (render nodes edges "output"))
+(defn fetch-schema [input output]
+  (if (.startsWith input "http")
+    (do (println "Fetching schema from" input)
+        (http/post input {:content-type "application/graphql"}))
+    (do (println "Loading schema from" input)
+        (spit (str output ".json") (slurp input)))))
+
+(defn process-schema [input output]
+  (let [[nodes edges] (load-schema (str output ".json"))]
+    (render nodes edges output)))
+
+(defn -main [& args]
+  (if (= (count args) 2)
+    (let [input (first args)
+          output (second args)]
+      (fetch-schema input output)
+      (process-schema input output)
+      (println "Done!")
+      (shutdown-agents))
+    (println "Usage: graphqlviz <url-or-file> <output-name>")))
+
+      
+
