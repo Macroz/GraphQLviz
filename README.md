@@ -25,6 +25,11 @@ java -jar graphqlviz.jar examples/digitransit.json digitransit
 
 ![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.svg)
 
+Also if you want to use the code from Clojure, add to your project.clj:
+
+[![Clojars Project](http://clojars.org/macroz/graphqlviz/latest-version.svg)](http://clojars.org/macroz/graphqlviz)
+
+
 ## Backlog
 
 - Add introspection query from endpoint
