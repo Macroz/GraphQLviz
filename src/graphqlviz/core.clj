@@ -12,6 +12,12 @@
 (defn scalar? [t]
   (= "SCALAR" (:kind t)))
 
+(defn enum? [t]
+  (= "ENUM" (:kind t)))
+
+(defn enum-values [t]
+  (:enumValues t))
+
 (defn terminal-type [t]
   (if (:ofType t)
     (recur (:ofType t))
@@ -73,14 +79,25 @@
   (let [target (str "<" (:name t) "_" (:name f) ">")]
     (str (:name f) ": " (describe-field-type (:type f)))))
 
+(defn stereotype [t]
+  (cond (enum? t) "&laquo;enum&raquo;"
+        :else ""))
+
+(defn type-description [t]
+  [[:TR [:TD {:BGCOLOR "#E535AB" :COLSPAN 2} [:FONT {:COLOR "white"} [:B (:name t)] [:BR] (stereotype t)]]]])
+
 (defn scalar-field-description [t f]
-  [:TR [:TD {:ALIGN "left"} (:name f) ": " (describe-field-type (:type f))]])
+  [:TR [:TD {:ALIGN "left" :BORDER 0} (:name f) ": " (describe-field-type (:type f))]])
+
+(defn enum-value-description [v]
+  [:TR [:TD {:ALIGN "left" :BORDER 0 :COLSPAN 2} (:name v)]])
 
 (defn type->descriptor [t]
   (let [scalar-fields (remove relation-field? (:fields t))]
     {:label (into [:TABLE {:CELLSPACING 0 :BORDER 1}]
-                  (concat [[:TR [:TD {:BGCOLOR "#E535AB"} [:FONT {:COLOR "white"} [:B (:name t)]]]]]
-                          (map (partial scalar-field-description t) scalar-fields)))}))
+                  (concat (type-description t)
+                          (map (partial scalar-field-description t) scalar-fields)
+                          (map enum-value-description (enum-values t))))}))
 
 (defn render [nodes edges filename]
   (let [dot (graph->dot nodes edges {:node {:shape :none :margin 0}
