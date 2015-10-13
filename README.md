@@ -21,15 +21,13 @@ You can use it like a regular Java app like this.
 java -jar graphqlviz.jar examples/digitransit.json digitransit
 ```
 
-TODO: The next verision will also support doing introspection queries.
-
 ![Example schema](examples/digitransit.json?raw=true) (from [Digitransit](http://digitransit.fi))
 
 ![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.svg)
 
 ## Backlog
 
-- Add introspection query
+- Add introspection query from endpoint
 - Use dynamic graph features as in [archi](https://github.com/Macroz/archi)
 
 =======
