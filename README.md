@@ -25,6 +25,12 @@ java -jar graphqlviz.jar examples/digitransit.json digitransit
 
 ![Example graph](https://rawgit.com/Macroz/GraphQLviz/master/examples/digitransit.svg)
 
+To run against a live GraphQL server, you can use the introspection query like this.
+
+```
+java -jar graphqlviz.jar http://digitransit.fi/otp/routers/finland/index/graphql digitransit
+```
+
 Also if you want to use the code from Clojure, add to your project.clj:
 
 [![Clojars Project](http://clojars.org/macroz/graphqlviz/latest-version.svg)](http://clojars.org/macroz/graphqlviz)
@@ -32,7 +38,6 @@ Also if you want to use the code from Clojure, add to your project.clj:
 
 ## Backlog
 
-- Add introspection query from endpoint
 - Use dynamic graph features as in [archi](https://github.com/Macroz/archi)
 
 =======
