@@ -1,4 +1,4 @@
-(defproject graphqlviz "0.1.0"
+(defproject macroz/graphqlviz "0.1.0"
   :description "Visualize GraphQL schemas using Graphviz"
   :url "https://github.com/Macroz/graphqlviz"
   :license {:name "Eclipse Public License"
