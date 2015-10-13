@@ -148,5 +148,3 @@
       (shutdown-agents))
     (println "Usage: graphqlviz <url-or-file> <output-name>")))
 
-      
-
