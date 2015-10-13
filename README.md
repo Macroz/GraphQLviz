@@ -10,7 +10,7 @@ You can use GraphQLviz from command-line if you have [Graphviz](http://www.graph
 lein run examples/digitransit.json digitransit
 ```
 
-Also there is a prepackaged jar in [Clojars](http://clojars.org) that is built with.
+Also there is a prepackaged jar in [Clojars](https://clojars.org/macroz/graphqlviz) that is built with.
 ```
 lein uberjar
 ```
