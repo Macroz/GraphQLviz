@@ -1,4 +1,4 @@
-digraph {
+digraph "digitransit" {
 graph[dpi=100, rankdir=LR, label="digitransit"]
 node[shape=none, margin=0]
 "QueryType"[label=<<TABLE BORDER="1" CELLSPACING="0"><TR><TD BGCOLOR="#E535AB" COLSPAN="2"><FONT COLOR="white"><B>QueryType</B><BR></BR></FONT></TD></TR></TABLE>>]
