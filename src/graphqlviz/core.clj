@@ -27,7 +27,7 @@
     t))
 
 (defn introspection-query []
-  {:query (slurp (io/file (io/resource "introspection.query")))})
+  {:query (slurp (io/resource "introspection.query"))})
 
 
 
