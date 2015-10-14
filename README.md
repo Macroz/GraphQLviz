@@ -2,6 +2,8 @@
 
 GraphQLviz marries GraphQL (schemas) with Graphviz.
 
+It's a tool to show you what your schema really looks like. At the moment, it's mostly useful as a complement to [GraphiQL](https://github.com/graphql/graphiql), like printing a huge poster size version to facilitate team discussions.
+
 ## Usage
 
 You can use GraphQLviz from command-line if you have [Graphviz](http://www.graphviz.org) and [Leiningen](http://leiningen.org) like this.
@@ -37,6 +39,7 @@ Also if you want to use the code from Clojure, add to your project.clj:
 ## Backlog
 
 - Use dynamic graph features as in [archi](https://github.com/Macroz/archi)
+- Develop a complete JavaScript solution of the same idea
 
 =======
 ## License
