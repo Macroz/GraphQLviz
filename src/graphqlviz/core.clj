@@ -125,7 +125,7 @@
 
 (defn load-schema [filename]
   (let [schema (slurp-json filename)
-        types (->> (:types (:__schema schema))
+        types (->> (:types (:__schema (:data schema)))
                    (remove uninteresting-type?))
         nodes (remove scalar? types)
         edges (mapcat type->edges types)]
@@ -139,7 +139,6 @@
           (spit (str output ".json") (-> response
                                          (:body)
                                          (json/read-str :key-fn keyword)
-                                         (:data)
                                          (json/write-str)))))
     (do (println "Loading schema from" input)
         (spit (str output ".json") (slurp input)))))
