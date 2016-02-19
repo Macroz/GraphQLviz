@@ -14,7 +14,8 @@ lein run examples/digitransit.json digitransit
 
 Also there is a prepackaged jar in [Clojars](https://clojars.org/macroz/graphqlviz).
 
-There is also a convenient [uberjar](uberjar/graphqlviz.jar?raw=true) available to download.
+There is also a convenient uberjar available to download from the releases.
+
 You can use it like a regular Java app like this.
 
 ```
