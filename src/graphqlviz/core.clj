@@ -33,9 +33,8 @@
 
 ;;; Configuration
 
-(def ^:dynamic *config*
-  {:expand-args false
-   :expand-arg-types false})
+(def config (atom {:expand-args false
+                   :expand-arg-types false}))
 
 
 ;;; Visualization
@@ -57,12 +56,12 @@
 
 (defn arg->str [a]
   (str (:name a)
-       (if (:expand-arg-types *config*)
+       (if (:expand-arg-types @config)
          (str ": " (describe-field-type (:type a)))
          "")))
 
 (defn format-args [args]
-  (if (:expand-args *config*)
+  (if (:expand-args @config)
     (apply str (interpose ", " (map arg->str args)))
     "..."))
 
