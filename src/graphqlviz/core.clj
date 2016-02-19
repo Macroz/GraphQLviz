@@ -72,8 +72,8 @@
          (if-not (empty? args)
            (str "(" (format-args args) ")")
            "")
-         #_": "
-         #_(describe-field-type type))))
+         ": "
+         (describe-field-type type))))
 
 (defn type->edges [t]
   (remove nil? (map (fn [{:keys [type name description] :as field}]
