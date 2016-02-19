@@ -134,13 +134,15 @@
 
 (defn fetch-schema [input output]
   (if (.startsWith input "http")
-    (do (println "Fetching schema from" input)
-        (let [response (http/post input {:content-type "application/json"
-                                         :body (json/write-str (introspection-query))})]
-          (spit (str output ".json") (-> response
-                                         (:body)
-                                         (json/read-str :key-fn keyword)
-                                         (json/write-str)))))
+    (let [options (merge {:content-type "application/json"
+                          :body (json/write-str (introspection-query))}
+                         (:auth @config))]
+      (println "Fetching schema from" input)
+      (let [response (http/post input options)]
+        (spit (str output ".json") (-> response
+                                       (:body)
+                                       (json/read-str :key-fn keyword)
+                                       (json/write-str)))))
     (do (println "Loading schema from" input)
         (spit (str output ".json") (slurp input)))))
 
