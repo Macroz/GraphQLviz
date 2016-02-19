@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [macroz/tangle "0.1.8"]
                  [org.clojure/data.json "0.2.6"]
-                 [clj-http "2.0.0"]]
+                 [clj-http "2.1.0"]
+                 [org.clojure/tools.cli "0.3.3"]]
   :main graphqlviz.core
   :aot :all
   )

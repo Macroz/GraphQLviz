@@ -2,7 +2,9 @@
   (:require [clojure.data.json :as json]
             [tangle.core :refer :all]
             [clj-http.client :as http]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.string :as string]
+            [clojure.tools.cli :refer [parse-opts]])
   (:gen-class))
 
 ;;; GraphQL
@@ -146,13 +148,34 @@
   (let [[nodes edges] (load-schema (str output ".json"))]
     (render nodes edges output)))
 
-(defn -main [& args]
-  (if (= (count args) 2)
-    (let [input (first args)
-          output (second args)]
-      (fetch-schema input output)
-      (process-schema output)
-      (println "Done!")
-      (shutdown-agents))
-    (println "Usage: graphqlviz <url-or-file> <output-name>")))
+(def cli-options
+  [["-a" "--auth AUTH" "Type of auth: basic, digest or oauth2"
+    :parse-fn (comp keyword string/trim)]
+   ["-u" "--user USERNAME" "Username for authentication"]
+   ["-p" "--password PASSWORD" "Password for authentication"]
+   ["-o" "--oauth TOKEN" "oAuth2 token for authentication"]
+   ["-h" "--help"]])
 
+(defn -main [& args]
+  (let [parsed-options (parse-opts args cli-options)
+        options (:options parsed-options)
+        args (:arguments parsed-options)
+        auth-config (case (:auth options)
+                      :basic {:auth {:basic-auth [(:username options) (:password options)]}}
+                      :digest {:auth {:digest-auth [(:username options) (:password options)]}}
+                      :oauth {:auth {:oauth-token (:oauth-token options)}}
+                      {})]
+    (swap! config merge auth-config)
+    (if (= (count args) 2)
+      (let [input (first args)
+            output (second args)]
+        (fetch-schema input output)
+        (process-schema output)
+        (println "Done!")
+        (shutdown-agents))
+      (if (:help options)
+        (do (println "Usage:")
+            (println "  graphqlviz <url-or-file> <output-name> <options>")
+            (println "\nOptions:") 
+            (println (:summary parsed-options)))
+        (println (:errors parsed-options))))))
