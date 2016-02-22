@@ -162,8 +162,10 @@
            (connection-type? n))))
 
 (defn interesting-edge? [e nodes-by-name]
-  (let [pointed-to-node (first (nodes-by-name (second e)))]
-    (interesting-node? pointed-to-node)))
+  (let [from-node (first (nodes-by-name (first e)))
+        to-node (first (nodes-by-name (second e)))]
+    (and (interesting-node? from-node)
+         (interesting-node? to-node))))
 
 (defn load-schema [filename]
   (let [schema (slurp-json filename)
