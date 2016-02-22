@@ -94,8 +94,7 @@
   (>= (.indexOf (second e) s) 0))
 
 (defn relates-to? [t name]
-  (let [related (type->edges t)]
-    (some #(edge-matches? % name) related)))
+  (some #(edge-matches? % name) (:edges t)))
 
 (defn connection-type? [t]
   (let [pointed-to-type-name (string/replace (:name t) "Connection" "")]
@@ -152,6 +151,13 @@
       (slurp)
       (json/read-str :key-fn keyword)))
 
+(defn add-edge-info [node edges]
+  (assoc node :edges edges))
+
+(defn assoc-nodes-edges [nodes edges-by-name]
+  (vec (for [node nodes]
+         (assoc node :edges (edges-by-name (:name node))))))
+
 (defn interesting-node? [n]
   (not (or (scalar? n)
            (page-info-type? n)
@@ -164,10 +170,15 @@
 
 (defn load-schema [filename]
   (let [schema (slurp-json filename)
-        types (->> (:types (:__schema (:data schema)))
-                   (remove uninteresting-type?))
-        nodes (remove scalar? types)
-        edges (mapcat type->edges types)]
+        types (:types (:__schema (:data schema)))
+        nodes (remove internal-type? types)
+        nodes-by-name (group-by :name nodes)
+        edges (->> nodes
+                   (mapcat type->edges))
+        edges-by-name (group-by first edges)
+        nodes (filter interesting-node? nodes)
+        edges (filter #(interesting-edge? % nodes-by-name) edges)
+        nodes (assoc-nodes-edges nodes edges-by-name)]
     [nodes edges]))
 
 (defn fetch-schema [input output]
