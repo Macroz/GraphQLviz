@@ -152,6 +152,16 @@
       (slurp)
       (json/read-str :key-fn keyword)))
 
+(defn interesting-node? [n]
+  (not (or (scalar? n)
+           (page-info-type? n)
+           (edge-type? n)
+           (connection-type? n))))
+
+(defn interesting-edge? [e nodes-by-name]
+  (let [pointed-to-node (first (nodes-by-name (second e)))]
+    (interesting-node? pointed-to-node)))
+
 (defn load-schema [filename]
   (let [schema (slurp-json filename)
         types (->> (:types (:__schema (:data schema)))
