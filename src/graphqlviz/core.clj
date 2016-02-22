@@ -107,10 +107,15 @@
   (let [pointed-to-type-name (string/replace (:name t) "Edge" "")]
     (and (string/ends-with? (:name t) "Edge")
          (relates-to? t pointed-to-type-name))))
+
+(defn page-info-type? [t]
+  (string/ends-with? (:name t) "PageInfo"))
+
 (defn stereotype [t]
   (cond (enum? t) "&laquo;enum&raquo;"
         (connection-type? t) "&laquo;connection&raquo;"
         (edge-type? t) "&laquo;edge&raquo;"
+        (page-info-type? t) "&laquo;page info&raquo;"
         :else ""))
 
 (defn type-description [t]
