@@ -170,8 +170,7 @@
         types (:types (:__schema (:data schema)))
         nodes (remove internal-type? types)
         nodes-by-name (group-by :name nodes)
-        edges (->> nodes
-                   (mapcat type->edges))
+        edges (mapcat type->edges nodes)
         edges-by-name (group-by first edges)
         nodes (filter interesting-node? nodes)
         edges (filter #(interesting-edge? % nodes-by-name) edges)
