@@ -98,8 +98,10 @@
     (some #(edge-matches? % name) related)))
 
 (defn connection-type? [t]
-  (and (string/ends-with? (:name t) "Connection")
-       (relates-to? t "PageInfo")))
+  (let [pointed-to-type-name (string/replace (:name t) "Connection" "")]
+    (and (string/ends-with? (:name t) "Connection")
+         (relates-to? t pointed-to-type-name)
+         (relates-to? t "PageInfo"))))
 
 (defn stereotype [t]
   (cond (enum? t) "&laquo;enum&raquo;"
