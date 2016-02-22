@@ -96,8 +96,8 @@
 (defn connection-type? [t]
   (let [pointed-to-type-name (string/replace (:name t) "Connection" "")]
     (and (string/ends-with? (:name t) "Connection")
-         (relates-to? t pointed-to-type-name)
-         (relates-to? t "PageInfo"))))
+         (or (relates-to? t pointed-to-type-name)
+             (relates-to? t "PageInfo")))))
 
 (defn edge-type? [t]
   (let [pointed-to-type-name (string/replace (:name t) "Edge" "")]
