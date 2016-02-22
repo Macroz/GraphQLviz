@@ -174,9 +174,10 @@
         nodes-by-name (group-by :name nodes)
         edges (mapcat type->edges nodes)
         edges-by-name (group-by first edges)
+        nodes (assoc-nodes-edges nodes edges-by-name)
         nodes (filter interesting-node? nodes)
         edges (filter #(interesting-edge? % nodes-by-name) edges)
-        nodes (assoc-nodes-edges nodes edges-by-name)]
+        ]
     [nodes edges]))
 
 (defn fetch-schema [input output]
