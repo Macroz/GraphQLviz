@@ -86,8 +86,20 @@
   (let [target (str "<" (:name t) "_" (:name f) ">")]
     (str (:name f) ": " (describe-field-type (:type f)))))
 
+(defn edge-matches? [e s]
+  (>= (.indexOf (second e) s) 0))
+
+(defn relates-to? [t name]
+  (let [related (type->edges t)]
+    (some #(edge-matches? % name) related)))
+
+(defn connection-type? [t]
+  (and (string/ends-with? (:name t) "Connection")
+       (relates-to? t "PageInfo")))
+
 (defn stereotype [t]
   (cond (enum? t) "&laquo;enum&raquo;"
+        (connection-type? t) "&laquo;connection&raquo;"
         :else ""))
 
 (defn type-description [t]
