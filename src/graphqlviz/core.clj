@@ -76,11 +76,15 @@
          ": "
          (describe-field-type type))))
 
+(defn field-to-edge [t field]
+  (let [{:keys [type name description]} field]
+    [(:name t) (:name (terminal-type type)) {:label (get-field-label field)
+                                             :labeltooltip (str description)}]))
+
 (defn type->edges [t]
-  (remove nil? (map (fn [{:keys [type name description] :as field}]
-                      [(:name t) (:name (terminal-type type)) {:label (get-field-label field)
-                                                               :labeltooltip (str description)}])
-                    (filter relation-field? (:fields t)))))
+  (->> (:fields t)
+       (filter relation-field?)
+       (map (partial field-to-edge t))))
 
 (defn field->str [t f]
   (let [target (str "<" (:name t) "_" (:name f) ">")]
