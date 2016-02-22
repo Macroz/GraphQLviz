@@ -44,9 +44,6 @@
 (defn relation-field? [f]
   (not (scalar? (terminal-type (:type f)))))
 
-(defn uninteresting-type? [t]
-  (internal-type? t))
-
 (defn type->id [t]
   (:name t))
 
