@@ -167,6 +167,22 @@
     (and (interesting-node? from-node)
          (interesting-node? to-node))))
 
+(defn add-simplified-connection-edges [nodes edges nodes-by-name]
+  (concat edges
+          (mapcat (fn [[from-node-name to-node-name {:keys [label labeltooltip]} :as e]]
+                    (let [to-node (first (nodes-by-name to-node-name))]
+                      (if (connection-type? to-node)
+                        (let [real-to-node-name (string/replace (:name to-node) "Connection" "")
+                              new-edge [from-node-name real-to-node-name
+                                        {:label (str label "\n&laquo;connection&raquo;")
+                                         :labeltooltip labeltooltip}]]
+                          [new-edge]
+                          ))))
+                  (mapcat :edges nodes))))
+
+(defn add-synthetic-edges [nodes edges nodes-by-name]
+  (add-simplified-connection-edges nodes edges nodes-by-name))
+
 (defn load-schema [filename]
   (let [schema (slurp-json filename)
         types (:types (:__schema (:data schema)))
@@ -177,6 +193,7 @@
         nodes-by-name (group-by :name nodes)
         nodes (filter interesting-node? nodes)
         edges (filter #(interesting-edge? % nodes-by-name) edges)
+        edges (add-synthetic-edges nodes edges nodes-by-name)
         ]
     [nodes edges]))
 
