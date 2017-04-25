@@ -54,7 +54,7 @@ The supported authentication types are `basic`, `digest` (with user and password
 java -jar graphqlviz.jar http://secret.example.com/graphql secret-schema-name -abasic -utester -ppassword
 ```
 
-Or with password prompt `-pp` or `--password-prompt`.
+Or with password prompt `-pp` or `--password-prompt` (since 0.5.0).
 
 ```
 java -jar graphqlviz.jar http://secret.example.com/graphql secret-schema-name -abasic -utester --password-prompt
