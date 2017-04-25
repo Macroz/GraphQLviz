@@ -32,10 +32,18 @@ To run against a live GraphQL server, you can use the introspection query like t
 java -jar graphqlviz.jar http://digitransit.fi/otp/routers/finland/index/graphql digitransit
 ```
 
-Since 0.4.0, you can pass options for authenticating with the server for the introspection query. The supported authentication types are basic, digest (with user and password) as well as oauth2 (with oauth token) See also `-h` for help.
+Since 0.4.0, you can pass options for authenticating with the server for the introspection query (`-a` or `--auth`).
+
+The supported authentication types are `basic`, `digest` (with user and password) as well as `oauth2` (with oauth token) See also `-h` for help.
 
 ```
-java -jar graphqlviz.jar http://digitransit.fi/otp/routers/finland/index/graphql digitransit -abasic -utester -ppassword
+java -jar graphqlviz.jar http://secret.example.com/graphql secret-schema-name -abasic -utester -ppassword
+```
+
+Or with password prompt `-pp` or `--password-prompt`.
+
+```
+java -jar graphqlviz.jar http://secret.example.com/graphql secret-schema-name -abasic -utester --password-prompt
 ```
 
 Futhermore if you want to use the code from Clojure, add to your project.clj:

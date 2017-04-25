@@ -215,11 +215,15 @@
   (let [[nodes edges] (load-schema (str output ".json"))]
     (render nodes edges output)))
 
+(defn read-password []
+  (String/valueOf (.readPassword (System/console) "Password:" nil)))
+
 (def cli-options
   [["-a" "--auth AUTH" "Type of auth: basic, digest or oauth2"
     :parse-fn (comp keyword string/trim)]
    ["-u" "--user USERNAME" "Username for authentication"]
    ["-p" "--password PASSWORD" "Password for authentication"]
+   ["-pp" "--password-prompt" "Prompt password for authentication"]
    ["-o" "--oauth TOKEN" "oAuth2 token for authentication"]
    ["-h" "--help"]])
 
@@ -227,6 +231,9 @@
   (let [parsed-options (parse-opts args cli-options)
         options (:options parsed-options)
         args (:arguments parsed-options)
+        options (if (:password-prompt options)
+                  (assoc options :password (read-password))
+                  options)
         auth-config (case (:auth options)
                       :basic {:auth {:basic-auth [(:username options) (:password options)]}}
                       :digest {:auth {:digest-auth [(:username options) (:password options)]}}
@@ -243,6 +250,6 @@
       (if (:help options)
         (do (println "Usage:")
             (println "  graphqlviz <url-or-file> <output-name> <options>")
-            (println "\nOptions:") 
+            (println "\nOptions:")
             (println (:summary parsed-options)))
         (println (:errors parsed-options))))))
