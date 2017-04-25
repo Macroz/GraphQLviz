@@ -24,25 +24,38 @@ Run `java -jar graphqlviz.jar --help` for more options or read the Full Usage.
 
 ## Full Usage
 
-You must have GraphQLviz executable from command-line. Download and install it using your package manager or go to [Graphviz](http://www.graphviz.org).
+You must have Graphviz executable from command-line. Download and install it using your package manager or go to [Graphviz](http://www.graphviz.org).
 
 You also need [Leiningen](http://leiningen.org). Leiningen is the [Clojure](http://clojure.org) build tool that runs on the Java Virtual Machine. This means you also need Java.
 
+If you like to use Leiningen, you can run like this:
 ```
-lein run https://api.digitransit.fi/routing/v1/routers/finland/index/graphql  digitransit
+lein run https://api.digitransit.fi/routing/v1/routers/finland/index/graphql digitransit
 ```
 
-There is a prepackaged jar in [Clojars](https://clojars.org/macroz/graphqlviz) so you don't have to build GraphQLviz yourself. If you want to use the code from Clojure, add to your project.clj:
+There is a prepackaged jar in [Clojars](https://clojars.org/macroz/graphqlviz) so you don't have to build GraphQLviz yourself.
+
+Also there is a convenient uberjar release available to download from the [release page](https://github.com/Macroz/GraphQLviz/releases).
+
+With these JAR files you can run like this:
+
+```
+java -jar graphqlviz.jar https://api.digitransit.fi/routing/v1/routers/finland/index/graphql digitransit
+```
+
+If you want to use the code from Clojure, perhaps from your own program, add to your project.clj:
 
 [![Clojars Project](http://clojars.org/macroz/graphqlviz/latest-version.svg)](http://clojars.org/macroz/graphqlviz)
 
-Also there is a convenient uberjar release available to download from the [release page](https://github.com/Macroz/GraphQLviz/releases).
+### Separate introspection
 
 Instead of running against a live GraphQL server, you can use a downloaded result of an introspection query like this:
 
 ```
 java -jar graphqlviz.jar examples/digitransit.json digitransit
 ```
+
+Otherwise, in the case of a URL, the introspection query is executed against the GraphQL endpoint and the results visualized.
 
 ### Authentication
 
